@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Hosting;
+using System;
 
 namespace AppWpf
 {
@@ -12,5 +13,8 @@ namespace AppWpf
             app.Run();
         }
 
+        public static IHostBuilder CreateHostBuilder(string[] args) => Host
+                                                                  .CreateDefaultBuilder(args)
+                                                                  .ConfigureServices(App.ConfigureServices);
     }
 }
