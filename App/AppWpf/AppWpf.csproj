@@ -13,7 +13,11 @@
     <Folder Include="Infrastructure\" />
     <Folder Include="Model\" />
     <Folder Include="Resources\" />
-    <Folder Include="Services\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
   </ItemGroup>
 
 </Project>
