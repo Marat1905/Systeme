@@ -3,6 +3,7 @@
 namespace Systeme.Domain.Entityes
 {
     /// <summary>Сущность автомобиля </summary>
+    // [Table("Cars")]
     public class Car:Entity
     {
         /// <summary>Модель машины </summary>

@@ -8,8 +8,10 @@ namespace Systeme.DAL.Configurations
     {
         public void Configure(EntityTypeBuilder<Car> builder)
         {
+            builder.ToTable("Users");
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
-            builder.Property(x=>x.Model).HasMaxLength(100);
+            builder.Property(x => x.Model).HasMaxLength(100);
         }
+
     }
 }
