@@ -5,6 +5,7 @@
     <TargetFramework>net7.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <StartupObject>AppWpf.Program</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,7 +14,6 @@
     <Folder Include="Model\" />
     <Folder Include="Resources\" />
     <Folder Include="Services\" />
-    <Folder Include="ViewModels\" />
   </ItemGroup>
 
 </Project>
