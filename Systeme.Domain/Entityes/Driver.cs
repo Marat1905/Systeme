@@ -4,7 +4,7 @@ namespace Systeme.Domain.Entityes
 {
     /// <summary>Сущность водителя</summary>
     //// [Table("Drivers")]
-    internal class Driver: Entity
+    public class Driver: Entity
     {
        /// <summary>Имя водителя </summary>
         public string Name { get; set; }
