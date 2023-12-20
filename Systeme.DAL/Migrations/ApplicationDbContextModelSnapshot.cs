@@ -40,7 +40,7 @@ namespace Systeme.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Cars", (string)null);
                 });
 
             modelBuilder.Entity("Systeme.Domain.Entityes.Driver", b =>

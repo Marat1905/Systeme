@@ -12,7 +12,7 @@ using Systeme.DAL.Context;
 namespace Systeme.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231220181059_initial")]
+    [Migration("20231220184626_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -43,7 +43,7 @@ namespace Systeme.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Cars", (string)null);
                 });
 
             modelBuilder.Entity("Systeme.Domain.Entityes.Driver", b =>

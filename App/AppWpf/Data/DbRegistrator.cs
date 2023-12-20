@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using Systeme.DAL.Context;
+using Systeme.DAL.Services;
 
 namespace AppWpf.Data
 {
@@ -32,6 +33,7 @@ namespace AppWpf.Data
                // opt.EnableSensitiveDataLogging();
            })
              .AddTransient<DbInitializer>()
+             .AddRepositoriesInDB()
         ;
     }
 }
