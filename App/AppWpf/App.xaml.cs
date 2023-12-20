@@ -1,4 +1,5 @@
-﻿using AppWpf.Services;
+﻿using AppWpf.Data;
+using AppWpf.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
@@ -19,6 +20,7 @@ namespace AppWpf
         public static IServiceProvider Services => Host.Services;
 
         internal static void ConfigureServices(HostBuilderContext host, IServiceCollection services) => services
+            .AddDatabase(host.Configuration.GetSection("Database"))
             .AddViewModels()
             ;
 
@@ -26,7 +28,12 @@ namespace AppWpf
         protected override async void OnStartup(StartupEventArgs e)
         {
             var host = Host;
-           
+
+            using (var scope = Services.CreateScope())
+            {
+                scope.ServiceProvider.GetRequiredService<DbInitializer>().InitializeAsync().Wait();
+            }
+
             base.OnStartup(e);
             await host.StartAsync();
         }
