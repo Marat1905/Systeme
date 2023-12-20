@@ -10,7 +10,7 @@ namespace Systeme.DAL.Configurations
         {
             builder.ToTable("Users");
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
-            builder.Property(x => x.Model).HasMaxLength(100);
+            builder.Property(x => x.Model).HasMaxLength(100).IsRequired();
         }
 
     }

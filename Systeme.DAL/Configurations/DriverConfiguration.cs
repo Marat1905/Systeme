@@ -10,7 +10,7 @@ namespace Systeme.DAL.Configurations
         {
             builder.ToTable("Drivers");
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
-            builder.Property(x => x.Name).HasMaxLength(100);
+            builder.Property(x => x.Name).HasMaxLength(100).IsRequired();
         }
     }
 }
