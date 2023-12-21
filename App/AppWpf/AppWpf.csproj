@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <Folder Include="Infrastructure\" />
-    <Folder Include="Model\" />
     <Folder Include="Resources\" />
   </ItemGroup>
 
@@ -27,6 +26,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Systeme.DAL\Systeme.DAL.csproj" />
+    <ProjectReference Include="..\..\Systeme.Logger\Systeme.Logger.csproj" />
   </ItemGroup>
 
   <ItemGroup>

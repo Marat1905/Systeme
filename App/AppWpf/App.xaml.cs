@@ -1,4 +1,5 @@
 ﻿using AppWpf.Data;
+using AppWpf.Model;
 using AppWpf.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -21,6 +22,7 @@ namespace AppWpf
 
         internal static void ConfigureServices(HostBuilderContext host, IServiceCollection services) => services
             .AddDatabase(host.Configuration.GetSection("Database"))
+            .AddLoggerService(host.Configuration.GetSection(nameof(LoggerConfig)))
             .AddViewModels()
             ;
 
