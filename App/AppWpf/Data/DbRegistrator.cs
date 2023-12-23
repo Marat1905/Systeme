@@ -31,7 +31,7 @@ namespace AppWpf.Data
                        break;
                };
                // opt.EnableSensitiveDataLogging();
-           })
+           },ServiceLifetime.Transient)
              .AddTransient<DbInitializer>()
              .AddRepositoriesInDB()
         ;
