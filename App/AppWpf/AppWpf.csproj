@@ -9,7 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Infrastructure\" />
     <Folder Include="Resources\" />
   </ItemGroup>
 
@@ -25,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Systeme.CarDriver\Systeme.CarDriver.csproj" />
     <ProjectReference Include="..\..\Systeme.DAL\Systeme.DAL.csproj" />
     <ProjectReference Include="..\..\Systeme.Logger\Systeme.Logger.csproj" />
   </ItemGroup>

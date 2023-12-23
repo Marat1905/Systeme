@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Windows;
+using Systeme.CarDriver;
 
 namespace AppWpf
 {
@@ -23,6 +24,7 @@ namespace AppWpf
         internal static void ConfigureServices(HostBuilderContext host, IServiceCollection services) => services
             .AddDatabase(host.Configuration.GetSection("Database"))
             .AddLoggerService(host.Configuration.GetSection(nameof(LoggerConfig)))
+            .AddCarDriverService()
             .AddViewModels()
             ;
 
