@@ -85,8 +85,8 @@ namespace AppWpf.ViewModels
                     (
                    _carDb.Items.AsEnumerable().FullOuterJoinJoin(
                 _driverDb.Items.AsEnumerable(),
-                     p => p.Date.TrimMilliseconds(),
-                     a => a.Date.TrimMilliseconds(),
+                     p => p.Date,
+                     a => a.Date,
                      (p, a) => new { MyCar = p, MyDriver = a })
                      .Select(a => new AutoModel(
                          a.MyDriver != null ? a.MyDriver.Name : "",

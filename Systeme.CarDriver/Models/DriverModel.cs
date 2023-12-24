@@ -17,13 +17,13 @@ namespace Systeme.CarDriver
         public DriverModel(string driverName, DateTime date)
         {
             Name = driverName;
-            Date = date;
+            Date = date.TrimMilliseconds();
         }
         public DriverModel() { }
 
         public static bool operator ==(DriverModel p1, ICarDriver p2)
         {
-            return p1.Date.TrimMilliseconds().CompareTo(p2.Date.TrimMilliseconds()) == 0;
+            return p1.Date.CompareTo(p2.Date) == 0;
         }
         public static bool operator !=(DriverModel p1, ICarDriver p2)
         {
