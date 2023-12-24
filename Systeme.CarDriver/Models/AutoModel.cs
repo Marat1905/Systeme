@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace AppWpf.Model
+﻿namespace Systeme.CarDriver
 {
-    internal class AutoModel
+    public class AutoModel
     {
         /// <summary>Водитель</summary>
         public string Driver { get; set; }
@@ -11,9 +9,9 @@ namespace AppWpf.Model
         public string Car { get; set; }
 
         /// <summary>Время</summary>
-        public DateTime Date { get;set; }
+        public DateTime Date { get; set; }
 
-        public AutoModel(string driver,string car,DateTime date)
+        public AutoModel(string driver, string car, DateTime date)
         {
             Driver = driver;
             Car = car;
