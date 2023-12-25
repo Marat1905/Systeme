@@ -58,30 +58,7 @@ namespace AppWpf.ViewModels
 
             Task.Run(()=>UpdateTable(Progress, cancel), cancel);
         }
-
-        //public Task UpdateTable(IProgress<ObservableCollection<AutoModel>> progress = null,
-        //   CancellationToken Cancel = default)
-        //{
-        //    while (true)
-        //    {
-
-        //        var resultJoint = _carDb.Items.AsEnumerable().FullOuterJoinJoin(   
-        //        _driverDb.Items.AsEnumerable(),                        
-        //             p => p.Date.TrimMilliseconds(),                               
-        //             a => a.Date.TrimMilliseconds(),                            
-        //             (p, a) => new { MyCar = p, MyDriver = a })     
-        //             .Select(a => new AutoModel(
-        //                 a.MyDriver != null ? a.MyDriver.Name : "",
-        //                 a.MyCar != null ? a.MyCar.Model : "",
-        //                 a.MyCar != null ? a.MyCar.Date : (a.MyDriver != null ? a.MyDriver.Date : default)
-        //                 )
-        //             ).OrderByDescending(p=>p.Date).ToList();
-
-        //        progress?.Report(new ObservableCollection<AutoModel>(resultJoint));
-        //        Task.Delay(2000);
-        //    }
-        //}
-
+     
         public Task UpdateTable(IProgress<ObservableCollection<AutoModel>> progress = null,
            CancellationToken Cancel = default)
         {

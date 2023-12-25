@@ -162,8 +162,6 @@ namespace AppWpf.ViewModels
 
         private void CarDriverTask_Notify(ICarDriverTask sender, ICarDriver carDriver)
         {
-            try
-            {
                 switch (carDriver)
                 {
                     case CarModel car:
@@ -186,12 +184,6 @@ namespace AppWpf.ViewModels
                     //AutoModels.Add(new AutoModel(carModel.Name, driverModel.Name, carModel.Date));
                     _logger.Write(LogLevel.Information, $"Совпали Марка автомобиля: {carModel.Name}; Водитель {driverModel.Name} ;");
                 }
-            }
-            catch (Exception ex)
-            {
-
-            }
-           
         }
 
         #region Приватные методы
