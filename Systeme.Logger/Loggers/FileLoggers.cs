@@ -7,9 +7,9 @@ namespace Systeme.Logger.Loggers
     /// <summary>Логгер в Файл</summary>
     public class FileLoggers : ILogger
     {
-        private readonly string fileName;
-        private readonly string fileExt;
-        object obj = new object();
+        private readonly string _fileName;
+        private readonly string _fileExt;
+        private readonly object _syncRoot = new object();
 
         /// <summary>Полный путь к каталогу</summary>
         public string Directory { get; }
@@ -29,8 +29,8 @@ namespace Systeme.Logger.Loggers
         {
             Directory = Path.Combine(Environment.CurrentDirectory, directory);
             Minute = minute;
-            this.fileName = fileName;
-            this.fileExt = fileExt;
+            _fileName = fileName;
+            _fileExt = fileExt;
             CheckingDirectory(Directory);
             FilesLastCreate(Directory, minute);
 
@@ -40,18 +40,27 @@ namespace Systeme.Logger.Loggers
         public void Write(LogLevel logLevel, string message)
         {
             var file = FilesLastCreate(Directory, Minute);
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine($"{DateTime.Now}\t{logLevel.ToString()} \t{message}");
+            //StringBuilder sb = new StringBuilder();
+            //sb.AppendLine($"{DateTime.Now}\t{logLevel.ToString()} \t{message}");
 
-            lock (obj)
+            //lock (_syncRoot)
+            //{
+            //    using (FileStream fstream = new FileStream(file.FullName, FileMode.Append))
+            //    {
+            //        // преобразуем строку в байты
+            //        byte[] input = Encoding.Default.GetBytes(sb.ToString());
+            //        // запись массива байтов в файл
+            //        fstream.Write(input, 0, input.Length);
+            //    }
+            //}
+            lock(_syncRoot)
             {
-                using (FileStream fstream = new FileStream(file.FullName, FileMode.Append))
-                {
-                    // преобразуем строку в байты
-                    byte[] input = Encoding.Default.GetBytes(sb.ToString());
-                    // запись массива байтов в файл
-                    fstream.Write(input, 0, input.Length);
-                }
+                using StreamWriter writer = file.AppendText();
+                writer.Write(DateTime.Now);
+                writer.Write("\t");
+                writer.Write(logLevel);
+                writer.Write("\t");
+                writer.Write(message);
             }
         }
 
@@ -83,7 +92,7 @@ namespace Systeme.Logger.Loggers
                 && file.CreationTime <= DateTime.Now);
                 // Проверяем есть ли соответствие условию
                 if (!files.Any())
-                    return CreateNewFile(directory, fileName);
+                    return CreateNewFile(directory, _fileName);
                 else
                 {
                     var file = files.OrderByDescending(file => file.CreationTime).First();
@@ -102,7 +111,7 @@ namespace Systeme.Logger.Loggers
         private FileInfo CreateNewFile(string directory, string fileName)
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append(fileName + DateTime.Now.ToString("_yyyy_dd_M__HH_mm_ss") + fileExt);
+            sb.Append(fileName + DateTime.Now.ToString("_yyyy_dd_M__HH_mm_ss") + _fileExt);
             FileInfo file = new FileInfo(Path.Combine(directory, sb.ToString()));
             return file;
         }
