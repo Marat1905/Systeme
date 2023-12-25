@@ -33,15 +33,18 @@ namespace Systeme.Tests
         [TestMethod()]
         public async Task T01_CarTask()
         {
+            //Arrange: устанавливаем начальные условия для выполнения теста
             var serviceProvider = Services.BuildServiceProvider();
             string[] cars = { "Мондео", "Крета", "Приус", "УАЗик", "Вольво", "Фокус", "Октавия", "Запорожец" };
             _carModels = new List<CarModel>();
             ICarDriverTask? carDriverTask= serviceProvider.GetService<ICarDriverTask>();
+            //Act: выполняем тест
             carDriverTask.Notify += CarDriverTask_Notify;
             Task.Run(() => carDriverTask.StartCarAsync(2000, cars));
             await Task.Delay(4100);
             carDriverTask.Notify -= CarDriverTask_Notify;
             carDriverTask.StopCar();
+            //Assert: верифицируем результат теста
             Assert.AreEqual(2, _carModels.Count());
 
         }
@@ -49,15 +52,18 @@ namespace Systeme.Tests
         [TestMethod()]
         public async Task T02_DriverTask()
         {
+            //Arrange: устанавливаем начальные условия для выполнения теста  
             var serviceProvider = Services.BuildServiceProvider();      
             string[] drivers = { "Петр", "Василий", "Николай", "Марина", "Феодосий", "Карина" };
             _driverModels= new List<DriverModel>();
             ICarDriverTask? carDriverTask = serviceProvider.GetService<ICarDriverTask>();
+            //Act: выполняем тест
             carDriverTask.Notify += CarDriverTask_Notify;
             Task.Run(() => carDriverTask.StartDriverAsync(3000, drivers));
             await Task.Delay(6100);
             carDriverTask.StopDriver();
-            carDriverTask.Notify -= CarDriverTask_Notify;            
+            carDriverTask.Notify -= CarDriverTask_Notify;
+            //Assert: верифицируем результат теста
             Assert.AreEqual(2, _driverModels.Count());
 
         }
@@ -65,6 +71,7 @@ namespace Systeme.Tests
         [TestMethod()]
         public async Task T03_DriverCarTask()
         {
+            //Arrange: устанавливаем начальные условия для выполнения теста 
             var serviceProvider = Services.BuildServiceProvider();
             string[] drivers = { "Петр", "Василий", "Николай", "Марина", "Феодосий", "Карина" };
             string[] cars = { "Мондео", "Крета", "Приус", "УАЗик", "Вольво", "Фокус", "Октавия", "Запорожец" };
@@ -73,6 +80,7 @@ namespace Systeme.Tests
             _autoModels = new List<AutoModel>();
 
             ICarDriverTask? carDriverTask = serviceProvider.GetService<ICarDriverTask>();
+            //Act: выполняем тест
             carDriverTask.Notify += CarDriverTask_Notify;
             Task.Run(() => carDriverTask.StartCarAsync(2000, cars));
             Task.Run(() => carDriverTask.StartDriverAsync(3000, drivers));
@@ -80,6 +88,7 @@ namespace Systeme.Tests
             carDriverTask.StopCar();
             carDriverTask.StopDriver();
             carDriverTask.Notify -= CarDriverTask_Notify;
+            //Assert: верифицируем результат теста
             Assert.AreEqual(1, _autoModels.Count());
 
         }
