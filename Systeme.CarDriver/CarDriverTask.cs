@@ -22,30 +22,25 @@ namespace Systeme.CarDriver
 
         public delegate void ProgressHandler(CarDriverTask sender, ICarDriver carDriver);
 
-       
 
-        public async Task StartCarAsync(int Timeout,string[] cars)
+
+        public async Task StartCarAsync(int Timeout, string[] cars)
         {
-            _CarCancellation?.Cancel();
             var cancellation = new CancellationTokenSource();
-            _CarCancellation = cancellation;
+            Interlocked.Exchange(ref _CarCancellation, cancellation)?.Cancel();
 
-            var cancel = cancellation.Token;
-
-            await foreach (var car in DoWorkAsync<CarModel>(Timeout, cars, cancel))
+            await foreach (var car in DoWorkAsync<CarModel>(Timeout, cars, _CarCancellation.Token))
                 Notify?.Invoke(this, car);
         }
 
         public async Task StartDriverAsync(int Timeout, string[] drivers)
         {
-            _DriverCancellation?.Cancel();
             var cancellation = new CancellationTokenSource();
-            _DriverCancellation = cancellation;
+            Interlocked.Exchange(ref _DriverCancellation, cancellation)?.Cancel();
 
-            var cancel = cancellation.Token;
 
-            await foreach (var driver in DoWorkAsync<DriverModel>(Timeout, drivers, cancel))
-                Notify?.Invoke(this, driver);;
+            await foreach (var driver in DoWorkAsync<DriverModel>(Timeout, drivers, _DriverCancellation.Token))
+                Notify?.Invoke(this, driver); ;
         }
 
         public void StopCar()
