@@ -40,19 +40,6 @@ namespace Systeme.Logger.Loggers
         public void Write(LogLevel logLevel, string message)
         {
             var file = FilesLastCreate(Directory, Minute);
-            //StringBuilder sb = new StringBuilder();
-            //sb.AppendLine($"{DateTime.Now}\t{logLevel.ToString()} \t{message}");
-
-            //lock (_syncRoot)
-            //{
-            //    using (FileStream fstream = new FileStream(file.FullName, FileMode.Append))
-            //    {
-            //        // преобразуем строку в байты
-            //        byte[] input = Encoding.Default.GetBytes(sb.ToString());
-            //        // запись массива байтов в файл
-            //        fstream.Write(input, 0, input.Length);
-            //    }
-            //}
             lock(_syncRoot)
             {
                 using StreamWriter writer = file.AppendText();
@@ -60,7 +47,7 @@ namespace Systeme.Logger.Loggers
                 writer.Write("\t");
                 writer.Write(logLevel);
                 writer.Write("\t");
-                writer.Write(message);
+                writer.WriteLine(message);
             }
         }
 
@@ -70,11 +57,7 @@ namespace Systeme.Logger.Loggers
         /// <param name="directory">Путь к каталогу</param>
         private void CheckingDirectory(string directory)
         {
-            DirectoryInfo directoryInfo = new DirectoryInfo(directory);
-            if (!directoryInfo.Exists)
-            {
-                directoryInfo.Create();
-            }
+            System.IO.Directory.CreateDirectory(directory); 
         }
 
         /// <summary>Проверяем файл на наличие</summary>
@@ -88,8 +71,8 @@ namespace Systeme.Logger.Loggers
 
                 DirectoryInfo directoryInfo = new DirectoryInfo(directory);
                 var files = directoryInfo.GetFiles().Where(file => file.
-                CreationTime >= (DateTime.Now.Subtract(TimeSpan.FromMinutes(minute)))
-                && file.CreationTime <= DateTime.Now);
+                                CreationTime >= (DateTime.Now.Subtract(TimeSpan.FromMinutes(minute)))
+                                && file.CreationTime <= DateTime.Now);
                 // Проверяем есть ли соответствие условию
                 if (!files.Any())
                     return CreateNewFile(directory, _fileName);
@@ -110,10 +93,7 @@ namespace Systeme.Logger.Loggers
         /// <returns></returns>
         private FileInfo CreateNewFile(string directory, string fileName)
         {
-            StringBuilder sb = new StringBuilder();
-            sb.Append(fileName + DateTime.Now.ToString("_yyyy_dd_M__HH_mm_ss") + _fileExt);
-            FileInfo file = new FileInfo(Path.Combine(directory, sb.ToString()));
-            return file;
+            return new FileInfo(Path.Combine(directory,$"{fileName}_{DateTime.Now:yyyy_dd_M__HH_mm_ss}{_fileExt}"));
         }
         #endregion
     }
