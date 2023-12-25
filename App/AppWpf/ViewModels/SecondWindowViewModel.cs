@@ -20,6 +20,7 @@ namespace AppWpf.ViewModels
         private readonly IRepository<Car> _carDb;
         private readonly IRepository<Driver> _driverDb;
         private readonly ILogger _logger;
+        private CancellationTokenSource _Cancellation;
 
         IProgress<ObservableCollection<AutoModel>> Progress { get; }
 
@@ -49,8 +50,13 @@ namespace AppWpf.ViewModels
             AutoModels =new ObservableCollection<AutoModel>();
 
             //Progress = new Progress<ObservableCollection<AutoModel>>(p => AutoModels=p);
+            _Cancellation?.Cancel();
+            var cancellation = new CancellationTokenSource();
+            _Cancellation = cancellation;
 
-            Task.Run(()=>UpdateTable(Progress));
+            var cancel = cancellation.Token;
+
+            Task.Run(()=>UpdateTable(Progress, cancel), cancel);
         }
 
         //public Task UpdateTable(IProgress<ObservableCollection<AutoModel>> progress = null,
@@ -79,8 +85,9 @@ namespace AppWpf.ViewModels
         public Task UpdateTable(IProgress<ObservableCollection<AutoModel>> progress = null,
            CancellationToken Cancel = default)
         {
-            while (true)
+            while (!Cancel.IsCancellationRequested)
             {
+
                 AutoModels = new ObservableCollection<AutoModel>
                     (
                    _carDb.Items.AsEnumerable().FullOuterJoinJoin(
@@ -95,13 +102,15 @@ namespace AppWpf.ViewModels
                          )
                      ).OrderByDescending(p => p.Date).ToList()
                     );
-                Task.Delay(2000);
+                Task.Delay(2000,Cancel);
             }
+            return Task.CompletedTask;
         }
 
         protected override void Dispose(bool disposing)
         {
-            _logger.Write(LogLevel.Information, "Закрыли второе окно");
+            _Cancellation.Cancel();
+            _logger.Write(LogLevel.Information, "Закрыли второе окно");          
             base.Dispose(disposing);
         }
     }

@@ -2,6 +2,7 @@
 using System;
 using System.Windows;
 using AppWpf.Infrastructure.Commands.Base;
+using AppWpf.ViewModels;
 
 namespace AppWpf.Infrastructure.Commands
 {
@@ -26,6 +27,7 @@ namespace AppWpf.Infrastructure.Commands
         private void OnWindowClosed(object Sender, EventArgs E)
         {
             ((Window)Sender).Closed -= OnWindowClosed;
+           ((SecondWindowViewModel)((Window)Sender).DataContext).Dispose();
             _Window = null;
         }
     }
