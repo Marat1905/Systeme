@@ -6,10 +6,17 @@ namespace Systeme.CarDriver
     public class DriverModel : ICarDriver
     {
         /// <summary>Имя водителя</summary>
-        public string Name { get; }
+        public string Name { get; set; }
 
         /// <summary>Время</summary>
-        public DateTime Date { get; }
+        private DateTime _date;
+        /// <summary>Время</summary>
+        public DateTime Date
+        {
+            get { return _date; }
+            set=> _date = value.TrimMilliseconds();
+        }
+
 
         /// <summary></summary>
         /// <param name="driverName"><inheritdoc cref="Name" path="/summary"/></param>

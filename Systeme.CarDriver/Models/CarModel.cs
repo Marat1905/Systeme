@@ -5,15 +5,21 @@ namespace Systeme.CarDriver
     public class CarModel : ICarDriver
     {
         /// <summary>Модель автомобиля</summary>
-        public string Name { get; }
+        public string Name { get;  set; }
 
         /// <summary>Время</summary>
-        public DateTime Date { get; }
+        private DateTime _date;
+        /// <summary>Время</summary>
+        public DateTime Date
+        {
+            get { return _date; }
+             set => _date = value.TrimMilliseconds(); 
+        }
 
         public CarModel(string carName, DateTime date)
         {
             Name = carName;
-            Date = date.TrimMilliseconds();
+            Date = date;
         }
         public CarModel() { }
 

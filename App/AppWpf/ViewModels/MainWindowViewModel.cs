@@ -162,24 +162,36 @@ namespace AppWpf.ViewModels
 
         private void CarDriverTask_Notify(ICarDriverTask sender, ICarDriver carDriver)
         {
-            switch (carDriver)
+            try
             {
-                case CarModel car:
-                    CarText = $"{car.Name} : {car.Date}";
-                    carModel = car;
-                    _carDb.Add(car.ToCar());
-                    break;
-                case DriverModel driver:
-                    DriverText = $"{driver.Name} : {driver.Date}";
-                    driverModel = driver;
-                    _driverDb.Add(driver.ToDriver());
-                    break;
+                switch (carDriver)
+                {
+                    case CarModel car:
+                        CarText = $"{car.Name} : {car.Date}";
+                        carModel = car;
+                         _carDb.Add(car.ToCar());
+                        break;
+                    case DriverModel driver:
+                        DriverText = $"{driver.Name} : {driver.Date}";
+                        driverModel = driver;
+                         _driverDb.Add(driver.ToDriver());
+                        break;
+                }
+                if (carModel == driverModel)
+                {
+                    App.Current.Dispatcher.BeginInvoke((Action)delegate ()
+                    {
+                        AutoModels.Add(new AutoModel(carModel.Name, driverModel.Name, carModel.Date));
+                    });
+                    //AutoModels.Add(new AutoModel(carModel.Name, driverModel.Name, carModel.Date));
+                    _logger.Write(LogLevel.Information, $"Совпали Марка автомобиля: {carModel.Name}; Водитель {driverModel.Name} ;");
+                }
             }
-            if (carModel == driverModel)
+            catch (Exception ex)
             {
-                AutoModels.Add(new AutoModel(carModel.Name, driverModel.Name, carModel.Date));
-                _logger.Write(LogLevel.Information, $"Совпали Марка автомобиля: {carModel.Name}; Водитель {driverModel.Name} ;") ;
+
             }
+           
         }
 
         #region Приватные методы
