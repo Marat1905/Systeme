@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using Systeme.CarDriver.Interfaces;
-using Systeme.Domain.Entityes;
 
 namespace Systeme.CarDriver
 {
@@ -9,9 +8,9 @@ namespace Systeme.CarDriver
     {
         private IProgress<ICarDriver> Progress { get; }
 
-        private  CancellationTokenSource _CarCancellation;
+        private CancellationTokenSource _CarCancellation;
 
-        private  CancellationTokenSource _DriverCancellation;
+        private CancellationTokenSource _DriverCancellation;
 
         public event ICarDriverTask.ProgressHandler Notify;
 
@@ -35,7 +34,6 @@ namespace Systeme.CarDriver
 
             await foreach (var car in DoWorkAsync<CarModel>(Timeout, cars, cancel))
                 Notify?.Invoke(this, car);
-            // await Task.Run(() => DoWorkCarAsync(Timeout,cars, Progress, cancel), cancel);
         }
 
         public async Task StartDriverAsync(int Timeout, string[] drivers)
@@ -46,12 +44,8 @@ namespace Systeme.CarDriver
 
             var cancel = cancellation.Token;
 
-           
-
             await foreach (var driver in DoWorkAsync<DriverModel>(Timeout, drivers, cancel))
-                Notify?.Invoke(this, driver);
-            //await Task.Run(() => DoWorkDriverAsync(Timeout, drivers, Progress, cancel), cancel);
-            //Notify?.Invoke(this, (ICarDriver)await Task.Run(() => DoWorkAsync<DriverModel>(Timeout, drivers, cancel), cancel));
+                Notify?.Invoke(this, driver);;
         }
 
         public void StopCar()
@@ -95,70 +89,5 @@ namespace Systeme.CarDriver
                 }
             }
         }
-        #region Хлам после рефакторинга
-        ///// <summary>Метод для выполнения перебора автомобилей</summary>
-        ///// <param name="Timeout">Тайм аут между перебором </param>
-        ///// <param name="car">Массив автомобилей</param>
-        ///// <param name="Progress">Возвращаем прогресс выполнения</param>
-        ///// <param name="Cancel">Токен отмены</param>
-        ///// <returns></returns>
-        //private async Task DoWorkCarAsync(int Timeout, string[] car,
-        //   IProgress<ICarDriver> Progress = null,
-        //   CancellationToken Cancel = default)
-        //{
-        //    Cancel.ThrowIfCancellationRequested();
-
-        //    var thread_id = Thread.CurrentThread.ManagedThreadId;
-
-        //    for (int j = 0; j < car.Length; j++)
-        //    {
-        //        if (!Cancel.IsCancellationRequested)
-        //        {
-        //            await Task.Delay(Timeout, Cancel);
-        //            Debug.WriteLine($"{car[j]} - поток: {thread_id}");
-        //            Progress?.Report(
-        //                new CarModel(car[j], DateTime.Now));
-        //            //делаем бесконечный цикл если не надо удалить
-        //            if (j == car.Length - 1)
-        //            {
-        //                j = -1;
-        //            }
-        //        }
-        //    }
-        //}
-
-        ///// <summary>Метод для выполнения перебора водителей</summary>
-        ///// <param name="Timeout">Тайм аут между перебором </param>
-        ///// <param name="driver">Массив водителей</param>
-        ///// <param name="Progress">Возвращаем прогресс выполнения</param>
-        ///// <param name="Cancel">Токен отмены</param>
-        ///// <returns></returns>
-        //private async Task DoWorkDriverAsync(int Timeout, string[] driver,
-        //  IProgress<ICarDriver> Progress = null,
-        //  CancellationToken Cancel = default)
-        //{
-        //    Cancel.ThrowIfCancellationRequested();
-
-        //    var thread_id = Thread.CurrentThread.ManagedThreadId;
-
-        //    for (int j = 0; j < driver.Length; j++)
-        //    {
-        //        if (!Cancel.IsCancellationRequested)
-        //        {
-        //            await Task.Delay(Timeout, Cancel);
-        //            Debug.WriteLine($"{driver[j]} - поток: {thread_id}");
-        //            Progress?.Report(
-        //                new DriverModel(driver[j], DateTime.Now));
-        //            //делаем бесконечный цикл если не надо удалить
-        //            if (j == driver.Length - 1)
-        //            {
-        //                j = -1;
-        //            }
-        //        }
-        //    }
-        //}
-        #endregion
-
-
     }
 }
