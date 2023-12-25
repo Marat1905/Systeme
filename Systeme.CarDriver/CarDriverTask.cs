@@ -8,11 +8,11 @@ namespace Systeme.CarDriver
     {
         private IProgress<ICarDriver> Progress { get; }
 
-        private CancellationTokenSource _CarCancellation;
+        private CancellationTokenSource? _CarCancellation;
 
-        private CancellationTokenSource _DriverCancellation;
+        private CancellationTokenSource? _DriverCancellation;
 
-        public event ICarDriverTask.ProgressHandler Notify;
+        public event ICarDriverTask.ProgressHandler? Notify;
 
         public CarDriverTask()
         {
@@ -50,12 +50,12 @@ namespace Systeme.CarDriver
 
         public void StopCar()
         {
-            _CarCancellation.Cancel();
+            _CarCancellation?.Cancel();
         }
 
         public void StopDriver()
         {
-            _DriverCancellation.Cancel();
+            _DriverCancellation?.Cancel();
         }
 
         /// <summary>Метод для выполнения перебора</summary>
