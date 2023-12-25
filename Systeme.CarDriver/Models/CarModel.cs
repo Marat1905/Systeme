@@ -23,9 +23,15 @@ namespace Systeme.CarDriver
         }
         public CarModel() { }
 
+        public override bool Equals(object? obj)
+        {
+            if (obj is not CarModel p1) return false;
+            return p1.Date.CompareTo(Date) == 0;
+        }
+
         public static bool operator == (CarModel p1, ICarDriver p2)
         {
-            return p1.Date.CompareTo(p2.Date) ==0;
+            return Equals(p1,p2);
         }
         public static bool operator != (CarModel p1, ICarDriver p2)
         {
