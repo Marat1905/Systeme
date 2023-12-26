@@ -1,8 +1,10 @@
 ﻿using AppWpf.Model;
 using AppWpf.ViewModels.Base;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Systeme.CarDriver;
@@ -56,11 +58,11 @@ namespace AppWpf.ViewModels
 
             var cancel = cancellation.Token;
 
-            Task.Run(()=>UpdateTable(Progress, cancel), cancel);
+            Task.Run(()=>UpdateTable(cancel), cancel);
+            //Task.Run(() => UpdateTable1(cancel), cancel);
         }
-     
-        public Task UpdateTable(IProgress<ObservableCollection<AutoModel>> progress = null,
-           CancellationToken Cancel = default)
+
+        public async Task UpdateTable(CancellationToken Cancel = default)
         {
             while (!Cancel.IsCancellationRequested)
             {
@@ -79,9 +81,38 @@ namespace AppWpf.ViewModels
                          )
                      ).OrderByDescending(p => p.Date).ToList()
                     );
-                Task.Delay(2000,Cancel);
+                await Task.Delay(1000, Cancel);
             }
-            return Task.CompletedTask;
+        }
+
+        public async Task UpdateTable1(CancellationToken Cancel = default)
+        {
+            while (Cancel.IsCancellationRequested)
+            {
+               await foreach (AutoModel model in ReadDateBase(Cancel))
+                    AutoModels.Add(model);
+
+                await Task.Delay(1000,Cancel);
+            }
+        }
+
+        public async IAsyncEnumerable<IEnumerable<AutoModel>> ReadDateBase([EnumeratorCancellation] CancellationToken Cancel = default)
+        {
+            Cancel.ThrowIfCancellationRequested();
+           
+            yield return  await  Task.Run(()=> _carDb.Items.AsEnumerable().FullOuterJoinJoin(
+                _driverDb.Items.AsEnumerable(),
+                     p => p.Date,
+                     a => a.Date,
+                     (p, a) => new { MyCar = p, MyDriver = a })
+                     .Select(a => new AutoModel(
+                         a.MyDriver != null ? a.MyDriver.Name : "",
+                         a.MyCar != null ? a.MyCar.Model : "",
+                         a.MyCar != null ? a.MyCar.Date : (a.MyDriver != null ? a.MyDriver.Date : default)
+                         )
+                     ).OrderByDescending(p => p.Date));
+
+                   
         }
 
         protected override void Dispose(bool disposing)
