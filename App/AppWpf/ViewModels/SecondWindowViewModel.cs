@@ -59,7 +59,6 @@ namespace AppWpf.ViewModels
             var cancel = cancellation.Token;
 
             Task.Run(()=>UpdateTable(cancel), cancel);
-            //Task.Run(() => UpdateTable1(cancel), cancel);
         }
 
         public async Task UpdateTable(CancellationToken Cancel = default)
@@ -85,35 +84,6 @@ namespace AppWpf.ViewModels
             }
         }
 
-        public async Task UpdateTable1(CancellationToken Cancel = default)
-        {
-            while (Cancel.IsCancellationRequested)
-            {
-               await foreach (AutoModel model in ReadDateBase(Cancel))
-                    AutoModels.Add(model);
-
-                await Task.Delay(1000,Cancel);
-            }
-        }
-
-        public async IAsyncEnumerable<IEnumerable<AutoModel>> ReadDateBase([EnumeratorCancellation] CancellationToken Cancel = default)
-        {
-            Cancel.ThrowIfCancellationRequested();
-           
-            yield return  await  Task.Run(()=> _carDb.Items.AsEnumerable().FullOuterJoinJoin(
-                _driverDb.Items.AsEnumerable(),
-                     p => p.Date,
-                     a => a.Date,
-                     (p, a) => new { MyCar = p, MyDriver = a })
-                     .Select(a => new AutoModel(
-                         a.MyDriver != null ? a.MyDriver.Name : "",
-                         a.MyCar != null ? a.MyCar.Model : "",
-                         a.MyCar != null ? a.MyCar.Date : (a.MyDriver != null ? a.MyDriver.Date : default)
-                         )
-                     ).OrderByDescending(p => p.Date));
-
-                   
-        }
 
         protected override void Dispose(bool disposing)
         {
